@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>City Issues</title>
+    <!-- Add CSS and JavaScript links here -->
+</head>
+
+<body>
+    <select id="city-picker" onchange="loadIssues()">
+        <option value="">Select a City</option>
+        {% for city in cities %}
+        <option value="{{ city }}">{{ city }}</option>
+        {% endfor %}
+    </select>
+
+    <div id="issues"></div>
+
+    <script>
+        function loadIssues() {
+            var city = document.getElementById("city-picker").value;
+            if (city) {
+                fetch('/get_issues/' + city)
+                    .then(response => response.json())
+                    .then(data => {
+                        var issuesDiv = document.getElementById("issues");
+                        issuesDiv.innerHTML = ''; // Clear previous content
+                        data.issues.forEach(issue => {
+                            issuesDiv.innerHTML += '<p><b>Issue:</b> ' + issue.issue + '<br><b>Solution:</b> ' + issue.solution + '</p>';
+                        });
+                    });
+            }
+        }
+            </script>
+</body>
+
+</html>
